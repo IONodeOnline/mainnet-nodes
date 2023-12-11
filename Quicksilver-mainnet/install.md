@@ -2,10 +2,11 @@
 |--------------|-------------------|------------|
 | quicksilver-2|      v1.2.17      |     110    |
 
-chain-id=quicksilver-2
-
-CUSTOM_PORT=110
-
+```bash
+  chain_id="quicksilver-2"
+  CUSTOM_PORT=110
+  name_all=haqqd
+```
 **Install dependencies**
 ```bash
 sudo apt -q update
@@ -48,7 +49,7 @@ go install cosmossdk.io/tools/cosmovisor/cmd/cosmovisor@v1.5.0
 # Create service
 sudo tee /etc/systemd/system/quicksilverd.service > /dev/null << EOF
 [Unit]
-Description=quicksilver node service
+Description=$name_all node service
 After=network-online.target
 
 [Service]
@@ -69,13 +70,13 @@ EOF
 **Initialize the node**
 ```bash
 # Set node configuration
-quicksilverd config chain-id $chain-id
-quicksilverd config keyring-backend file
-quicksilverd config node tcp://localhost:${CUSTOM_PORT}57
+$name_all config chain-id $chain_id
+$name_all config keyring-backend file
+$name_all config node tcp://localhost:${CUSTOM_PORT}57
 
 # Initialize the node
 MONIKER="YOUR_MONIKER_GOES_HERE"
-quicksilverd init $MONIKER --chain-id $chain-id
+$name_all init $MONIKER --chain-id $chain_id
 
 # Download genesis and addrbook
 curl -Ls https://snapshots.kjnodes.com/quicksilver/genesis.json > $HOME/.quicksilverd/config/genesis.json
@@ -102,8 +103,8 @@ sed -i -e "s%^address = \"tcp://0.0.0.0:1317\"%address = \"tcp://0.0.0.0:${CUSTO
 **Start service and check the logs**
 ```bash
 sudo systemctl daemon-reload
-sudo systemctl enable quicksilverd
-sudo systemctl start quicksilverd && sudo journalctl -u quicksilverd -f --no-hostname -o cat
+sudo systemctl enable $name_all
+sudo systemctl start $name_all && sudo journalctl -u $name_all -f --no-hostname -o cat
 # GET SYNC INFO
 quicksilverd status 2>&1 | jq .SyncInfo
 curl -s localhost:${CUSTOM_PORT}/status | jq .result.sync_info
@@ -111,24 +112,24 @@ curl -s localhost:${CUSTOM_PORT}/status | jq .result.sync_info
 **Key management**
 ```bash
 # ADD NEW KEY
-archwayd keys add wallet
+$name_all keys add wallet
 # RECOVER EXISTING KEY
-archwayd keys add wallet --recover
+$name_all keys add wallet --recover
 # LIST ALL KEYS
-archwayd keys list
+$name_all keys list
 # EXPORT KEY TO A FILE
-archwayd keys export wallet
+$name_all keys export wallet
 ```
 **CREATE NEW VALIDATOR**
 ```bash
-quicksilverd tx staking create-validator \
+$name_all tx staking create-validator \
 --amount 1000000uqck \
 --pubkey $(quicksilverd tendermint show-validator) \
 --moniker "YOUR_MONIKER_NAME" \
 --identity "YOUR_KEYBASE_ID" \
 --details "YOUR_DETAILS" \
 --website "YOUR_WEBSITE_URL" \
---chain-id $chain-id \
+--chain-id $chain_id \
 --commission-rate 0.05 \
 --commission-max-rate 0.20 \
 --commission-max-change-rate 0.01 \
@@ -141,12 +142,12 @@ quicksilverd tx staking create-validator \
 ```
 **EDIT EXISTING VALIDATOR**
 ```bash
-quicksilverd tx staking edit-validator \
+$name_all tx staking edit-validator \
 --new-moniker "YOUR_MONIKER_NAME" \
 --identity "YOUR_KEYBASE_ID" \
 --details "YOUR_DETAILS" \
 --website "YOUR_WEBSITE_URL" \
---chain-id $chain-id \
+--chain-id $chain_id \
 --commission-rate 0.05 \
 --from wallet \
 --gas-adjustment 1.4 \
@@ -156,14 +157,14 @@ quicksilverd tx staking edit-validator \
 ```
 **RESET CHAIN DATA**
 ```bash
-quicksilverd tendermint unsafe-reset-all --keep-addr-book --home $HOME/.quicksilverd --keep-addr-book
+$name_all tendermint unsafe-reset-all --keep-addr-book --home $HOME/.quicksilverd --keep-addr-book
 ```
 **REMOVE NODE: Make sure you have backed up your priv_validator_key.json**
 ```bash
 cd $HOME
-sudo systemctl stop quicksilverd
-sudo systemctl disable quicksilverd
-sudo rm /etc/systemd/system/quicksilverd
+sudo systemctl stop $name_all
+sudo systemctl disable $name_all
+sudo rm /etc/systemd/system/$name_all
 sudo systemctl daemon-reload
 rm -f $(which quicksilverd)
 rm -rf $HOME/.quicksilverd
@@ -172,9 +173,9 @@ rm -rf $HOME/quicksilver
 **Token management**
 ```bash
 # WITHDRAW REWARDS FROM ALL VALIDATORS
-quicksilverd tx distribution withdraw-all-rewards --from wallet --chain-id $chain-id --gas-adjustment 1.4 --gas auto --gas-prices 0.0001uqck -y
+$name_all tx distribution withdraw-all-rewards --from wallet --chain-id $chain_id --gas-adjustment 1.4 --gas auto --gas-prices 0.0001uqck -y
 # WITHDRAW COMMISSION AND REWARDS FROM YOUR VALIDATOR
-quicksilverd tx distribution withdraw-rewards $(quicksilverd keys show wallet --bech val -a) --commission --from wallet --chain-id $chain-id --gas-adjustment 1.4 --gas auto --gas-prices 0.0001uqck -y
+$name_all tx distribution withdraw-rewards $(quicksilverd keys show wallet --bech val -a) --commission --from wallet --chain-id $chain_id --gas-adjustment 1.4 --gas auto --gas-prices 0.0001uqck -y
 # Unjail Validator
-quicksilverd tx slashing unjail --from wallet --chain-id $chain-id --gas-adjustment 1.4 --gas auto --gas-prices 0.0001uqck -y
+$name_all tx slashing unjail --from wallet --chain-id $chain_id --gas-adjustment 1.4 --gas auto --gas-prices 0.0001uqck -y
 ```
