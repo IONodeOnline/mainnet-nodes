@@ -5,7 +5,7 @@
 ```bash
   chain_id="quicksilver-2"
   CUSTOM_PORT=110
-  name_all=haqqd
+  name_all=quicksilverd
 ```
 **Install dependencies**
 ```bash
