@@ -2,10 +2,11 @@
 |--------------|-------------------|------------|
 | archway-1	|      v4.0.2      |     156    |
 
+```bash
 chain-id=archway-1
-
 CUSTOM_PORT=156
-
+name_all=archwayd
+```
 **Install dependencies**
 ```bash
 sudo apt -q update
@@ -48,7 +49,7 @@ go install cosmossdk.io/tools/cosmovisor/cmd/cosmovisor@v1.5.0
 # Create service
 sudo tee /etc/systemd/system/archwayd.service > /dev/null << EOF
 [Unit]
-Description=archway node service
+Description=$name_all node service
 After=network-online.target
 
 [Service]
@@ -69,13 +70,13 @@ EOF
 **Initialize the node**
 ```bash
 # Set node configuration
-archwayd config chain-id archway-1
+archwayd config chain-id $chain_id
 archwayd config keyring-backend file
 archwayd config node tcp://localhost:${CUSTOM_PORT}57
 
 # Initialize the node
 MONIKER="YOUR_MONIKER_GOES_HERE"
-archwayd init $MONIKER --chain-id $chain-id
+archwayd init $MONIKER --chain-id $chain_id
 
 # Download genesis and addrbook
 curl -Ls https://snapshots.kjnodes.com/archway/genesis.json > $HOME/.archway/config/genesis.json
@@ -102,33 +103,33 @@ sed -i -e "s%^address = \"tcp://0.0.0.0:1317\"%address = \"tcp://0.0.0.0:${CUSTO
 **Start service and check the logs**
 ```bash
 sudo systemctl daemon-reload
-sudo systemctl enable archwayd
-sudo systemctl start archwayd && sudo journalctl -u archwayd -f --no-hostname -o cat
+sudo systemctl enable $name_all
+sudo systemctl start $name_all && sudo journalctl -u $name_all -f --no-hostname -o cat
 # GET SYNC INFO
-archwayd status 2>&1 | jq .SyncInfo
+$name_all status 2>&1 | jq .SyncInfo
 curl -s localhost:${CUSTOM_PORT}/status | jq .result.sync_info
 ```
 **Key management**
 ```bash
 # ADD NEW KEY
-archwayd keys add wallet
+$name_all keys add wallet
 # RECOVER EXISTING KEY
-archwayd keys add wallet --recover
+$name_all keys add wallet --recover
 # LIST ALL KEYS
-archwayd keys list
+$name_all keys list
 # EXPORT KEY TO A FILE
-archwayd keys export wallet
+$name_all keys export wallet
 ```
 **CREATE NEW VALIDATOR**
 ```bash
-archwayd tx staking create-validator \
+$name_all tx staking create-validator \
 --amount 1000000aarch \
 --pubkey $(archwayd tendermint show-validator) \
 --moniker "YOUR_MONIKER_NAME" \
 --identity "YOUR_KEYBASE_ID" \
 --details "YOUR_DETAILS" \
 --website "YOUR_WEBSITE_URL" \
---chain-id $chain-id \
+--chain-id $chain_id \
 --commission-rate 0.05 \
 --commission-max-rate 0.20 \
 --commission-max-change-rate 0.01 \
@@ -141,12 +142,12 @@ archwayd tx staking create-validator \
 ```
 **EDIT EXISTING VALIDATOR**
 ```bash
-archwayd tx staking edit-validator \
+$name_all tx staking edit-validator \
 --new-moniker "YOUR_MONIKER_NAME" \
 --identity "YOUR_KEYBASE_ID" \
 --details "YOUR_DETAILS" \
 --website "YOUR_WEBSITE_URL" \
---chain-id $chain-id \
+--chain-id $chain_id \
 --commission-rate 0.05 \
 --from wallet \
 --gas-adjustment 1.4 \
@@ -156,13 +157,13 @@ archwayd tx staking edit-validator \
 ```
 **RESET CHAIN DATA**
 ```bash
-archwayd tendermint unsafe-reset-all --keep-addr-book --home $HOME/.archway --keep-addr-book
+$name_all tendermint unsafe-reset-all --keep-addr-book --home $HOME/.archway --keep-addr-book
 ```
 **REMOVE NODE: Make sure you have backed up your priv_validator_key.json**
 ```bash
 cd $HOME
-sudo systemctl stop archwayd
-sudo systemctl disable archwayd
+sudo systemctl stop $name_all
+sudo systemctl disable $name_all
 sudo rm /etc/systemd/system/archwayd
 sudo systemctl daemon-reload
 rm -f $(which archwayd)
@@ -172,9 +173,9 @@ rm -rf $HOME/archway
 **Token management**
 ```bash
 # WITHDRAW REWARDS FROM ALL VALIDATORS
-archwayd tx distribution withdraw-all-rewards --from wallet --chain-id $chain-id --gas-adjustment 1.4 --gas auto --gas-prices 1000000000000aarch -y
+$name_all tx distribution withdraw-all-rewards --from wallet --chain-id $chain_id --gas-adjustment 1.4 --gas auto --gas-prices 1000000000000aarch -y
 # WITHDRAW COMMISSION AND REWARDS FROM YOUR VALIDATOR
-archwayd tx distribution withdraw-rewards $(archwayd keys show wallet --bech val -a) --commission --from wallet --chain-id $chain-id --gas-adjustment 1.4 --gas auto --gas-prices 1000000000000aarch -y
+$name_all tx distribution withdraw-rewards $(archwayd keys show wallet --bech val -a) --commission --from wallet --chain-id $chain_id --gas-adjustment 1.4 --gas auto --gas-prices 1000000000000aarch -y
 # Unjail Validator
-archwayd tx slashing unjail --from wallet --chain-id $chain-id --gas-adjustment 1.4 --gas auto --gas-prices 0.0001aarch -y
+$name_all tx slashing unjail --from wallet --chain-id $chain_id --gas-adjustment 1.4 --gas auto --gas-prices 0.0001aarch -y
 ```
