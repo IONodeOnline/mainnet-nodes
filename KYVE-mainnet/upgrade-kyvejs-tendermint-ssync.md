@@ -7,12 +7,12 @@ unzip kyve-linux-x64.zip
 chmod +x kyve-linux-x64
 rm kyve-linux-x64.zip
 ```
-## archway-ssync
+#archway-ssync
 ```bash
 mv kyve-linux-x64 ~/.kysor/upgrades/pool-4/1.1.0/bin/kyve-linux-x64
 sudo systemctl restart archway-ssyncd && sudo journalctl -u archway-ssyncd -f -o cat
 ```
-## cronos-ssync
+#cronos-ssync
 ```bash
 mv kyve-linux-x64 ~/.kysor/upgrades/pool-6/1.1.0/bin/kyve-linux-x64
 sudo systemctl restart cronos-ssyncd && sudo journalctl -u cronos-ssyncd -f -o cat
