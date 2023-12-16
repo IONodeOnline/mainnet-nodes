@@ -7,20 +7,20 @@
   CUSTOM_PORT=110
   name_all=quicksilverd
 ```
-**Install dependencies**
+## Install dependencies
 ```bash
 sudo apt -q update
 sudo apt -qy install curl git jq lz4 build-essential
 sudo apt -qy upgrade
 ```
-**INSTALL GO**
+## INSTALL GO
 ```bash
 sudo rm -rf /usr/local/go
 curl -Ls https://go.dev/dl/go1.20.12.linux-amd64.tar.gz | sudo tar -xzf - -C /usr/local
 eval $(echo 'export PATH=$PATH:/usr/local/go/bin' | sudo tee /etc/profile.d/golang.sh)
 eval $(echo 'export PATH=$PATH:$HOME/go/bin' | tee -a $HOME/.profile)
 ```
-**Download and build binaries**
+## Download and build binaries
 ```bash
 # Clone project repository
 cd $HOME
@@ -41,7 +41,7 @@ rm -rf build
 sudo ln -s $HOME/.quicksilverd/cosmovisor/genesis $HOME/.quicksilverd/cosmovisor/current -f
 sudo ln -s $HOME/.quicksilverd/cosmovisor/current/bin/quicksilverd /usr/local/bin/quicksilverd -f
 ```
-**Install Cosmovisor and create a service**
+## Install Cosmovisor and create a service
 ```bash
 # Download and install Cosmovisor
 go install cosmossdk.io/tools/cosmovisor/cmd/cosmovisor@v1.5.0
@@ -67,7 +67,7 @@ Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/
 WantedBy=multi-user.target
 EOF
 ```
-**Initialize the node**
+## Initialize the node 
 ```bash
 # Set node configuration
 $name_all config chain-id $chain_id
@@ -100,7 +100,7 @@ sed -i -e "s%^proxy_app = \"tcp://127.0.0.1:26658\"%proxy_app = \"tcp://127.0.0.
 sed -i -e "s%^address = \"tcp://0.0.0.0:1317\"%address = \"tcp://0.0.0.0:${CUSTOM_PORT}17\"%; s%^address = \":8080\"%address = \":${CUSTOM_PORT}80\"%; s%^address = \"0.0.0.0:9090\"%address = \"0.0.0.0:${CUSTOM_PORT}90\"%; s%^address = \"0.0.0.0:9091\"%address = \"0.0.0.0:${CUSTOM_PORT}91\"%" $HOME/.quicksilverd/config/app.toml
 
 ```
-**Start service and check the logs**
+## Start service and check the logs 
 ```bash
 sudo systemctl daemon-reload
 sudo systemctl enable $name_all
@@ -109,7 +109,7 @@ sudo systemctl start $name_all && sudo journalctl -u $name_all -f --no-hostname 
 quicksilverd status 2>&1 | jq .SyncInfo
 curl -s localhost:${CUSTOM_PORT}/status | jq .result.sync_info
 ```
-**Key management**
+## Key management
 ```bash
 # ADD NEW KEY
 $name_all keys add wallet
@@ -120,7 +120,7 @@ $name_all keys list
 # EXPORT KEY TO A FILE
 $name_all keys export wallet
 ```
-**CREATE NEW VALIDATOR**
+## CREATE NEW VALIDATOR
 ```bash
 $name_all tx staking create-validator \
 --amount 1000000uqck \
@@ -140,7 +140,7 @@ $name_all tx staking create-validator \
 --gas-prices 0.0001uqck \
 -y
 ```
-**EDIT EXISTING VALIDATOR**
+## EDIT EXISTING VALIDATOR
 ```bash
 $name_all tx staking edit-validator \
 --new-moniker "YOUR_MONIKER_NAME" \
@@ -155,11 +155,11 @@ $name_all tx staking edit-validator \
 --gas-prices 0.0001uqck \
 -y
 ```
-**RESET CHAIN DATA**
+## RESET CHAIN DATA
 ```bash
 $name_all tendermint unsafe-reset-all --keep-addr-book --home $HOME/.quicksilverd --keep-addr-book
 ```
-**REMOVE NODE: Make sure you have backed up your priv_validator_key.json**
+## REMOVE NODE: Make sure you have backed up your priv_validator_key.json
 ```bash
 cd $HOME
 sudo systemctl stop $name_all
@@ -170,7 +170,7 @@ rm -f $(which quicksilverd)
 rm -rf $HOME/.quicksilverd
 rm -rf $HOME/quicksilver
 ```
-**Token management**
+## Token management
 ```bash
 # WITHDRAW REWARDS FROM ALL VALIDATORS
 $name_all tx distribution withdraw-all-rewards --from wallet --chain-id $chain_id --gas-adjustment 1.4 --gas auto --gas-prices 0.0001uqck -y
