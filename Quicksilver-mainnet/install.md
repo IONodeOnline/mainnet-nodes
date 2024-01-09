@@ -1,6 +1,6 @@
 |   Chain ID	 | Latest Version Tag| Custom Port|
 |--------------|-------------------|------------|
-| quicksilver-2|      v1.2.17      |     110    |
+| quicksilver-2|      v1.4.5      |     110    |
 
 ```bash
   chain_id="quicksilver-2"
@@ -16,7 +16,7 @@ sudo apt -qy upgrade
 ## INSTALL GO
 ```bash
 sudo rm -rf /usr/local/go
-curl -Ls https://go.dev/dl/go1.20.12.linux-amd64.tar.gz | sudo tar -xzf - -C /usr/local
+curl -Ls https://go.dev/dl/go1.21.5.linux-amd64.tar.gz | sudo tar -xzf - -C /usr/local
 eval $(echo 'export PATH=$PATH:/usr/local/go/bin' | sudo tee /etc/profile.d/golang.sh)
 eval $(echo 'export PATH=$PATH:$HOME/go/bin' | tee -a $HOME/.profile)
 ```
@@ -27,7 +27,7 @@ cd $HOME
 rm -rf quicksilver
 git clone https://github.com/ingenuity-build/quicksilver.git
 cd quicksilver
-git checkout v1.2.17
+git checkout v1.4.5
 
 # Build binaries
 make build
