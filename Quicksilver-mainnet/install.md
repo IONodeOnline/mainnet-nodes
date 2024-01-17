@@ -1,6 +1,6 @@
 |   Chain ID	 | Latest Version Tag| Custom Port|
 |--------------|-------------------|------------|
-| quicksilver-2|      v1.4.5      |     110    |
+| quicksilver-2|      v1.4.6      |     110    |
 
 ```bash
   chain_id="quicksilver-2"
@@ -27,7 +27,7 @@ cd $HOME
 rm -rf quicksilver
 git clone https://github.com/ingenuity-build/quicksilver.git
 cd quicksilver
-git checkout v1.4.5
+git checkout v1.4.6
 
 # Build binaries
 make build
