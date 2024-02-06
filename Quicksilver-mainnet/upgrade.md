@@ -1,11 +1,11 @@
-## Upgrade v1.4.6 : pre-build
+## Upgrade v1.4.7 : pre-build
 ```bash
-mkdir -p $HOME/.quicksilverd/cosmovisor/upgrades/v1.4.6/bin/
-wget https://github.com/quicksilver-zone/quicksilver/releases/download/v1.4.6/quicksilverd-v1.4.6-amd64
-chmod +x quicksilverd-v1.4.6-amd64
-mv quicksilverd-v1.4.6-amd64 $HOME/.quicksilverd/cosmovisor/upgrades/v1.4.6/bin/quicksilverd
+mkdir -p $HOME/.quicksilverd/cosmovisor/upgrades/v1.4.7/bin/
+wget https://github.com/quicksilver-zone/quicksilver/releases/download/v1.4.7/quicksilverd-v1.4.7-amd64
+chmod +x quicksilverd-v1.4.7-amd64
+mv quicksilverd-v1.4.7-amd64 $HOME/.quicksilverd/cosmovisor/upgrades/v1.4.7/bin/quicksilverd
 ```
-## Upgrade v1.4.6 : build
+## Upgrade v1.4.7 : build
 ### Install go v1.21.5
 ```bash
 sudo rm -rf /usr/local/go
@@ -19,10 +19,10 @@ cd $HOME
 rm -rf quicksilver
 git clone https://github.com/ingenuity-build/quicksilver.git
 cd quicksilver
-git checkout v1.4.6
+git checkout v1.4.7
 ```
 ### Prepare binaries for Cosmovisor
 ```bash
-mkdir -p $HOME/.quicksilverd/cosmovisor/upgrades/v1.4.6/bin/
-mv build/quicksilverd $HOME/.quicksilverd/cosmovisor/upgrades/v1.4.6/bin/
+mkdir -p $HOME/.quicksilverd/cosmovisor/upgrades/v1.4.7/bin/
+mv build/quicksilverd $HOME/.quicksilverd/cosmovisor/upgrades/v1.4.7/bin/
 ```
