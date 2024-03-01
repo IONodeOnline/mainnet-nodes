@@ -1,6 +1,7 @@
 |   Chain ID	 |Custom Port|
 |--------------|-----------|
 | noble-1      |    150    |
+## Documents
 https://docs.kyve.network/validators/protocol_nodes/pools/noble/run_noble_node
 https://github.com/noble-assets/networks/tree/main/mainnet/noble-1
 ```bash
@@ -30,7 +31,11 @@ cd $HOME
 rm -rf noble
 git clone https://github.com/noble-assets/noble.git
 cd noble
-git checkout v1.0.0
+git checkout v1.0.0 => go19 
+git checkout v2.0.0 => go19 
+git checkout v3.0.0 => go19 
+git checkout v3.1.0 => go19 
+git checkout v4.0.1 => go21
 
 # Build binaries
 make build
@@ -40,7 +45,9 @@ mkdir -p /root/.noble/cosmovisor/upgrades
 mkdir -p $HOME/.noble/cosmovisor/genesis/bin
 mv bin/nobled $HOME/.noble/cosmovisor/genesis/bin/
 rm -rf bin
-
+# v3.0.0
+mkdir -p /root/.noble/cosmovisor/upgrades/radon/bin/
+ 
 # Create application symlinks
 sudo ln -s $HOME/.noble/cosmovisor/genesis $HOME/.noble/cosmovisor/current -f
 sudo ln -s $HOME/.noble/cosmovisor/current/bin/nobled /usr/local/bin/nobled -f
@@ -48,7 +55,7 @@ sudo ln -s $HOME/.noble/cosmovisor/current/bin/nobled /usr/local/bin/nobled -f
 ## Install Cosmovisor and create a service
 ```bash
 # Download and install Cosmovisor
-go install github.com/cosmos/cosmos-sdk/cosmovisor/cmd/cosmovisor@v1.0.0
+go install cosmossdk.io/tools/cosmovisor/cmd/cosmovisor@v1.4.0
 #go install cosmossdk.io/tools/cosmovisor/cmd/cosmovisor@v1.5.0
 # Create service 
 sudo tee /etc/systemd/system/nobled.service > /dev/null << EOF
