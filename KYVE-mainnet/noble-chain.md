@@ -47,7 +47,16 @@ mv bin/nobled $HOME/.noble/cosmovisor/genesis/bin/
 rm -rf bin
 # v3.0.0
 mkdir -p /root/.noble/cosmovisor/upgrades/radon/bin/
- 
+mkdir -p /root/.noble/cosmovisor/upgrades/randon/bin/
+
+# v3.1.0
+mkdir -p /root/.noble/cosmovisor/upgrades/v3.1.0/bin/
+mv bin/nobled /root/.noble/cosmovisor/upgrades/v3.1.0/bin/
+
+# v4.0.1
+mkdir -p /root/.noble/cosmovisor/upgrades/argon/bin/
+mv bin/nobled /root/.noble/cosmovisor/upgrades/argon/bin/
+
 # Create application symlinks
 sudo ln -s $HOME/.noble/cosmovisor/genesis $HOME/.noble/cosmovisor/current -f
 sudo ln -s $HOME/.noble/cosmovisor/current/bin/nobled /usr/local/bin/nobled -f
