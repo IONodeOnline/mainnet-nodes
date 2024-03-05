@@ -17,13 +17,20 @@ sudo apt-get install build-essential
 sudo apt -qy upgrade
 ```
 ## INSTALL GO
-### v1.0.0 -> go19
+### v1.0.0, v2.0.0, v3.0.0 -> go19
 ```bash
 sudo rm -rf /usr/local/go
 curl -Ls https://go.dev/dl/go1.19.2.linux-amd64.tar.gz | sudo tar -xzf - -C /usr/local
 eval $(echo 'export PATH=$PATH:/usr/local/go/bin' | sudo tee /etc/profile.d/golang.sh)
 eval $(echo 'export PATH=$PATH:$HOME/go/bin' | tee -a $HOME/.profile)
+go version
 ```
+### v4.0.1 => go21
+sudo rm -rf /usr/local/go
+curl -Ls https://go.dev/dl/go1.21.7.linux-amd64.tar.gz | sudo tar -xzf - -C /usr/local
+eval $(echo 'export PATH=$PATH:/usr/local/go/bin' | sudo tee /etc/profile.d/golang.sh)
+eval $(echo 'export PATH=$PATH:$HOME/go/bin' | tee -a $HOME/.profile)
+go version
 ## Download and build binaries
 ```bash
 # Clone project repository
