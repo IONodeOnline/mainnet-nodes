@@ -52,9 +52,13 @@ mkdir -p /root/.noble/cosmovisor/upgrades
 mkdir -p $HOME/.noble/cosmovisor/genesis/bin
 mv bin/nobled $HOME/.noble/cosmovisor/genesis/bin/
 rm -rf bin
+# v2.0.0
+mkdir -p /root/.noble/cosmovisor/upgrades/v2/bin/
+mv bin/nobled /root/.noble/cosmovisor/upgrades/v2/bin/
+
 # v3.0.0
 mkdir -p /root/.noble/cosmovisor/upgrades/radon/bin/
-mkdir -p /root/.noble/cosmovisor/upgrades/randon/bin/
+mv bin/nobled /root/.noble/cosmovisor/upgrades/radon/bin/
 
 # v3.1.0
 mkdir -p /root/.noble/cosmovisor/upgrades/v3.1.0/bin/
@@ -129,5 +133,5 @@ sudo systemctl enable $name_all
 sudo systemctl start $name_all && sudo journalctl -u $name_all -f --no-hostname -o cat
 # GET SYNC INFO
 $name_all status 2>&1 | jq .SyncInfo
-curl -s localhost:${CUSTOM_PORT}/status | jq .result.sync_info
+curl -s localhost:${CUSTOM_PORT}57/status | jq .result.sync_info
 ```
