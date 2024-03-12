@@ -53,8 +53,8 @@ mkdir -p $HOME/.noble/cosmovisor/genesis/bin
 mv bin/nobled $HOME/.noble/cosmovisor/genesis/bin/
 rm -rf bin
 # v2.0.0
-mkdir -p /root/.noble/cosmovisor/upgrades/v2/bin/
-mv bin/nobled /root/.noble/cosmovisor/upgrades/v2/bin/
+mkdir -p /root/.noble/cosmovisor/upgrades/neon/bin/
+mv bin/nobled /root/.noble/cosmovisor/upgrades/neon/bin/
 
 # v3.0.0
 mkdir -p /root/.noble/cosmovisor/upgrades/radon/bin/
